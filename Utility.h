@@ -1,3 +1,4 @@
 #pragma once
 
-void DrawTextString(int x, int y, DWORD color, const wchar_t *str);
+void InitDebugFont();
+void DrawDebugText(int x, int y, DWORD color, const wchar_t *str);

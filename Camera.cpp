@@ -80,7 +80,7 @@ void CCamera::MoveCamera()
     wchar_t msg[1024];
 
     _snwprintf_s(msg, ARRAYSIZE(msg), L"speed: %f %f %f\r\n", m_speed.x, m_speed.y, m_speed.z);
-    DrawTextString(0, 0, 0xcccccccc, msg);
+    DrawDebugText(0, 0, 0xcccccccc, msg);
     // TODO 限制最大速度
 	
 	BOOL bPress = FALSE;

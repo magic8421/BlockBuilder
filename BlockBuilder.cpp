@@ -10,6 +10,7 @@
 #include "SelectVertices.h"
 #include "SkyLight.h"
 #include "ToolBox.h"
+#include "Utility.h"
 
 // include the Direct3D Library files
 #pragma comment (lib, "d3d9.lib")
@@ -79,6 +80,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
     // set up and initialize Direct3D
     InitD3D(hWnd);
+
+    InitDebugFont();
     
     // enter the main loop:
 
@@ -95,7 +98,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
         if(msg.message == WM_QUIT)
             break;
 		// ÏÞÖÆÖ¡Êý
-		const float constFps = 24.0f;
+		const float constFps = 60.0f;
 		float timeInOneFps = 1000.0f/constFps;
 		DWORD timeBegin = GetTickCount();
 
