@@ -3,6 +3,7 @@
 #include "BlockBuilder.h"
 #include "block.h"
 #include "Chunk.h"
+#include "Utility.h"
 
 extern CChunk g_chunk;
 
@@ -75,6 +76,12 @@ void CCamera::MoveCamera()
 		m_speed.y -= accelerate;	
 		//m_vecLookAt.y -= accelerate;
 	}
+
+    wchar_t msg[1024];
+
+    _snwprintf_s(msg, ARRAYSIZE(msg), L"speed: %f %f %f\r\n", m_speed.x, m_speed.y, m_speed.z);
+    DrawTextString(0, 0, 0xcccccccc, msg);
+    // TODO 限制最大速度
 	
 	BOOL bPress = FALSE;
 	for (int i = 0; i < 6; i ++)
