@@ -17,8 +17,6 @@
 #include <memory.h>
 #include <tchar.h>
 
-
-// TODO: 在此处引用程序需要的其他头文件
 #include <windowsx.h>
 #include <d3d9.h>
 #include <d3dx9.h>
@@ -28,7 +26,8 @@
 #include <comdef.h>
 #include <crtdbg.h>
 
-#include <vld.h>
+//#include <vld.h>
+
 //#ifdef _DEBUG
 //	#define new DEBUG_CLIENTBLOCK 
 //   #define DEBUG_CLIENTBLOCK   new( _CLIENT_BLOCK, __FILE__, __LINE__)

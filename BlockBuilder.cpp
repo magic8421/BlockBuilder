@@ -307,6 +307,11 @@ void RenderFrame(void)
 	}
     DrawCrosshairs();
     
+    FpsCounter::Instance()->Feed();
+    wchar_t msg[1024];
+    _snwprintf_s(msg, ARRAYSIZE(msg), L"FPS:%d", FpsCounter::Instance()->Get());
+    DrawDebugText(0, 18, 0xff4444ff, msg);
+
     g_d3ddev->EndScene(); 
     g_d3ddev->Present(NULL, NULL, NULL, NULL);
 }

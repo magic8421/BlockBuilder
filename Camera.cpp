@@ -82,7 +82,8 @@ void CCamera::MoveCamera()
     _snwprintf_s(msg, ARRAYSIZE(msg), L"speed: %f %f %f\r\n", m_speed.x, m_speed.y, m_speed.z);
     DrawDebugText(0, 0, 0xcccccccc, msg);
     // TODO 限制最大速度
-	
+    float speed_mod = sqrtf(m_speed.x * m_speed.x + m_speed.y * m_speed.y + m_speed.z * m_speed.z);
+
 	BOOL bPress = FALSE;
 	for (int i = 0; i < 6; i ++)
 	{
@@ -94,14 +95,14 @@ void CCamera::MoveCamera()
 	}
 	if (!bPress)
 	{
-		float mod = sqrtf(m_speed.x * m_speed.x + m_speed.y * m_speed.y + m_speed.z * m_speed.z);
-		if (fabs(mod - 0.0f) > 0.0001)
+		//float mod = sqrtf(m_speed.x * m_speed.x + m_speed.y * m_speed.y + m_speed.z * m_speed.z);
+		if (fabs(speed_mod - 0.0f) > 0.0001)
 		{
-			D3DXVECTOR3 unit = m_speed / mod;
-			mod -= accelerate;
-			if (mod < 0.0f)
-				mod = 0.0f;
-			m_speed = unit * mod;
+			D3DXVECTOR3 unit = m_speed / speed_mod;
+			speed_mod -= accelerate;
+			if (speed_mod < 0.0f)
+				speed_mod = 0.0f;
+			m_speed = unit * speed_mod;
 		}
 	}
 	

@@ -39,3 +39,28 @@ void DrawDebugText(int x, int y, DWORD color, const wchar_t *str)
     // Output the text, left aligned
     pDebugFont->DrawText(NULL, str, -1, &TextRect, DT_LEFT, color);
 }
+
+FpsCounter * FpsCounter::Instance()
+{
+    static FpsCounter* inst = nullptr;
+    if (!inst) {
+        inst = new FpsCounter;
+    }
+    return inst;
+}
+
+void FpsCounter::Feed()
+{
+    m_fps++;
+    int time = (int)::GetTickCount() / 1000;
+    if (time != m_prevTime) {
+        m_prevTime = time;
+        m_prevFps = m_fps;
+        m_fps = 0;
+    }
+}
+
+int FpsCounter::Get()
+{
+    return m_prevFps;
+}
