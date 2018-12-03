@@ -110,6 +110,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			Sleep(DWORD(timeInOneFps - timeSpend));
     }
 
+    FpsCounter::Free();
     // clean up DirectX and COM
     CleanD3D();
     return msg.wParam;

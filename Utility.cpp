@@ -42,11 +42,15 @@ void DrawDebugText(int x, int y, DWORD color, const wchar_t *str)
 
 FpsCounter * FpsCounter::Instance()
 {
-    static FpsCounter* inst = nullptr;
-    if (!inst) {
-        inst = new FpsCounter;
+    if (!m_inst) {
+        m_inst = new FpsCounter;
     }
-    return inst;
+    return m_inst;
+}
+
+void FpsCounter::Free()
+{
+    delete m_inst;
 }
 
 void FpsCounter::Feed()
@@ -64,3 +68,5 @@ int FpsCounter::Get()
 {
     return m_prevFps;
 }
+
+FpsCounter* FpsCounter::m_inst= nullptr;
