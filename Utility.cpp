@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Utility.h"
-#include <cassert>
 
 extern LPDIRECT3DDEVICE9 g_d3ddev;
 
@@ -38,6 +37,33 @@ void DrawDebugText(int x, int y, DWORD color, const wchar_t *str)
 
     // Output the text, left aligned
     pDebugFont->DrawText(NULL, str, -1, &TextRect, DT_LEFT, color);
+}
+
+static int printX = 0;
+static int printY = 0;
+
+void PrintOnScreen(const wchar_t *format, ...)
+{
+    const size_t SIZE = 1024 * 2;
+    wchar_t buffer[SIZE];
+    va_list varg;
+    va_start(varg, format);
+    ::StringCbVPrintfW(buffer, SIZE, format, varg);
+    va_end(varg);
+
+    HRESULT hr = S_OK;
+    // Rectangle where the text will be located
+    RECT TextRect = { printX, printY, 0, 0 };
+    // Calculate the rectangle the text will occupy
+    hr = pDebugFont->DrawText(NULL, buffer, -1, &TextRect, DT_CALCRECT, 0xffcccccc);
+    hr = pDebugFont->DrawText(NULL, buffer, -1, &TextRect, DT_LEFT, 0xffcccccc);
+    printY += TextRect.bottom - TextRect.top + 3;
+}
+
+void RewindDebugPrint()
+{
+    printX = 0;
+    printY = 0;
 }
 
 FpsCounter * FpsCounter::Instance()

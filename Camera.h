@@ -10,7 +10,7 @@ public:
 	CCamera(void);
 	~CCamera(void);
 	
-	void MoveCamera();
+    void MoveCamera(DWORD deltaTicks);
 	void RotateCamera();
 	const D3DXVECTOR3 *GetCameraVector();
 	const D3DXVECTOR3 *GetViewVector();

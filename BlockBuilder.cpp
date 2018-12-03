@@ -36,7 +36,7 @@ CToolBox g_toolbox;
 
 // function prototypes
 void InitD3D(HWND hWnd);
-void RenderFrame(void);
+void RenderFrame(DWORD deltaTicks);
 void CleanD3D(void);
 void InitGraphics(void);
 void InitLight(void);    // sets up the light and the material
@@ -73,7 +73,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
     RegisterClassEx(&wc);
 
     hWnd = CreateWindowEx(NULL, L"DXHWND", L"¿é¿éÊÀ½ç 1.5",
-                          WS_CAPTION|WS_SYSMENU, CW_USEDEFAULT, CW_USEDEFAULT, 870, 520,
+                          WS_CAPTION|WS_SYSMENU, 0, 0, 1350, 700,
                           NULL, NULL, hInstance, NULL);
 	g_hwndMain = hWnd;
     ShowWindow(hWnd, nCmdShow);
@@ -86,6 +86,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
     // enter the main loop:
 
     MSG msg;
+    DWORD prevTick = GetTickCount();
 
     while(TRUE)
     {
@@ -103,11 +104,13 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		DWORD timeBegin = GetTickCount();
 
 		UpdateScene();
-		RenderFrame();
+		RenderFrame(timeBegin - prevTick);
 		
 		DWORD timeSpend = GetTickCount() - timeBegin;
-		if (timeSpend < timeInOneFps)
-			Sleep(DWORD(timeInOneFps - timeSpend));
+        if (timeSpend < timeInOneFps) {
+            Sleep(DWORD(timeInOneFps - timeSpend));
+        }
+        prevTick = GetTickCount();
     }
 
     FpsCounter::Free();
@@ -259,7 +262,7 @@ void UpdateScene()
 }
 
 // this is the function used to render a single frame
-void RenderFrame(void)
+void RenderFrame(DWORD deltaTicks)
 {
     g_d3ddev->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
     g_d3ddev->Clear(0, NULL, D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
@@ -272,7 +275,7 @@ void RenderFrame(void)
     D3DXMATRIX matView;
     if (g_camera.GetCaptureMouse())
     {
-		g_camera.MoveCamera();
+		g_camera.MoveCamera(deltaTicks);
 		g_camera.RotateCamera();
 	}
     D3DXMatrixLookAtLH(&matView,
@@ -309,9 +312,10 @@ void RenderFrame(void)
     DrawCrosshairs();
     
     FpsCounter::Instance()->Feed();
-    wchar_t msg[1024];
+    wchar_t msg[64];
     _snwprintf_s(msg, ARRAYSIZE(msg), L"FPS:%d", FpsCounter::Instance()->Get());
-    DrawDebugText(0, 18, 0xff4444ff, msg);
+    DrawDebugText(600, 0, 0xff4444ff, msg);
+    RewindDebugPrint();
 
     g_d3ddev->EndScene(); 
     g_d3ddev->Present(NULL, NULL, NULL, NULL);

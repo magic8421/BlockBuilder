@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <cassert>
 
 #define WIN32_LEAN_AND_MEAN             // 从 Windows 头中排除极少使用的资料
 // Windows 头文件:
@@ -28,6 +29,7 @@
 #include <Commdlg.h>
 #include <shlwapi.h>
 #include <comdef.h>
+#include <strsafe.h>
 //#include <crtdbg.h>
 
 //#include <vld.h>

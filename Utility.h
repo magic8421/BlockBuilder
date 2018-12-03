@@ -2,6 +2,9 @@
 
 void InitDebugFont();
 void DrawDebugText(int x, int y, DWORD color, const wchar_t *str);
+void PrintOnScreen(const wchar_t *format, ...);
+void RewindDebugPrint();
+
 
 class FpsCounter
 {

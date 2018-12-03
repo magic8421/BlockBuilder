@@ -37,9 +37,10 @@ const D3DXVECTOR3 *CCamera::GetCameraVector()
 	return &m_vecCamera;
 }
 
-void CCamera::MoveCamera()
+void CCamera::MoveCamera(DWORD deltaTicks)
 {
-	const float accelerate = 0.04f;
+    PrintOnScreen(L"deltaTicks: %d", deltaTicks);
+    const float accelerate = 0.04f;// * (float)deltaTicks / 16.6f * 33.3f;
 	float radian = m_viewHoriz;
 	// 应该用速度向量 减速的时候是求速度向量的模 然后减去加速度 乘上速度的单位向量
 
@@ -77,10 +78,8 @@ void CCamera::MoveCamera()
 		//m_vecLookAt.y -= accelerate;
 	}
 
-    wchar_t msg[1024];
+    PrintOnScreen(L"speed: %f %f %f\r\n", m_speed.x, m_speed.y, m_speed.z);
 
-    _snwprintf_s(msg, ARRAYSIZE(msg), L"speed: %f %f %f\r\n", m_speed.x, m_speed.y, m_speed.z);
-    DrawDebugText(0, 0, 0xcccccccc, msg);
     // TODO 限制最大速度
     float speed_mod = sqrtf(m_speed.x * m_speed.x + m_speed.y * m_speed.y + m_speed.z * m_speed.z);
 
