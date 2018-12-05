@@ -102,7 +102,7 @@ TimeManager & TimeManager::Instance()
 void TimeManager::MakeTick()
 {
     DWORD now = ::GetTickCount();
-    m_delta = (float)(now - m_prevTick) / 16.666666f;
+    m_delta = (float)(now - m_prevTick) / 100.0f;
     m_prevTick = now;
 }
 

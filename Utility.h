@@ -35,6 +35,7 @@ public:
     static TimeManager &Instance();
 
     void MakeTick();
+    // a tick is 100ms
     float GetTickDelta();
 
 private:
@@ -42,3 +43,8 @@ private:
     DWORD m_prevTick = 0;
     float m_delta = 0;
 };
+
+inline float ModVector3(const D3DXVECTOR3 &v)
+{
+    return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+}
