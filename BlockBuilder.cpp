@@ -11,6 +11,7 @@
 #include "SkyLight.h"
 #include "ToolBox.h"
 #include "Utility.h"
+#include "Logger.h"
 
 // include the Direct3D Library files
 #pragma comment (lib, "d3d9.lib")
@@ -36,7 +37,7 @@ CToolBox g_toolbox;
 
 // function prototypes
 void InitD3D(HWND hWnd);
-void RenderFrame(DWORD deltaTicks);
+void RenderFrame();
 void CleanD3D(void);
 void InitGraphics(void);
 void InitLight(void);    // sets up the light and the material
@@ -86,7 +87,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
     // enter the main loop:
 
     MSG msg;
-    DWORD prevTick = GetTickCount();
 
     while(TRUE)
     {
@@ -96,24 +96,16 @@ int WINAPI WinMain(HINSTANCE hInstance,
             DispatchMessage(&msg);
         }
 
-        if(msg.message == WM_QUIT)
+        if (msg.message == WM_QUIT) {
             break;
-		// ÏÞÖÆÖ¡Êý
-		const float constFps = 60.0f;
-		float timeInOneFps = 1000.0f/constFps;
-		DWORD timeBegin = GetTickCount();
+        }
 
 		UpdateScene();
-		RenderFrame(timeBegin - prevTick);
+		RenderFrame();
 		
-		DWORD timeSpend = GetTickCount() - timeBegin;
-        if (timeSpend < timeInOneFps) {
-            Sleep(DWORD(timeInOneFps - timeSpend));
-        }
-        prevTick = GetTickCount();
+        //Sleep(30);
     }
 
-    FpsCounter::Free();
     // clean up DirectX and COM
     CleanD3D();
     return msg.wParam;
@@ -262,7 +254,7 @@ void UpdateScene()
 }
 
 // this is the function used to render a single frame
-void RenderFrame(DWORD deltaTicks)
+void RenderFrame()
 {
     g_d3ddev->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
     g_d3ddev->Clear(0, NULL, D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
@@ -275,7 +267,7 @@ void RenderFrame(DWORD deltaTicks)
     D3DXMATRIX matView;
     if (g_camera.GetCaptureMouse())
     {
-		g_camera.MoveCamera(deltaTicks);
+		g_camera.MoveCamera();
 		g_camera.RotateCamera();
 	}
     D3DXMatrixLookAtLH(&matView,
@@ -311,14 +303,15 @@ void RenderFrame(DWORD deltaTicks)
 	}
     DrawCrosshairs();
     
-    FpsCounter::Instance()->Feed();
+    FpsCounter::Instance().Feed();
     wchar_t msg[64];
-    _snwprintf_s(msg, ARRAYSIZE(msg), L"FPS:%d", FpsCounter::Instance()->Get());
+    _snwprintf_s(msg, ARRAYSIZE(msg), L"FPS:%d", FpsCounter::Instance().Get());
     DrawDebugText(600, 0, 0xff4444ff, msg);
     RewindDebugPrint();
 
     g_d3ddev->EndScene(); 
     g_d3ddev->Present(NULL, NULL, NULL, NULL);
+    TimeManager::Instance().MakeTick();
 }
 
 

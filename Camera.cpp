@@ -37,10 +37,10 @@ const D3DXVECTOR3 *CCamera::GetCameraVector()
 	return &m_vecCamera;
 }
 
-void CCamera::MoveCamera(DWORD deltaTicks)
+void CCamera::MoveCamera()
 {
-    PrintOnScreen(L"deltaTicks: %d", deltaTicks);
-    const float accelerate = 0.04f;// * (float)deltaTicks / 16.6f * 33.3f;
+    PrintOnScreen(L"deltaTicks: %f", TimeManager::Instance().GetTickDelta());
+    const float accelerate = 0.04f * TimeManager::Instance().GetTickDelta();
 	float radian = m_viewHoriz;
 	// 应该用速度向量 减速的时候是求速度向量的模 然后减去加速度 乘上速度的单位向量
 

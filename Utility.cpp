@@ -66,17 +66,10 @@ void RewindDebugPrint()
     printY = 0;
 }
 
-FpsCounter * FpsCounter::Instance()
+FpsCounter &FpsCounter::Instance()
 {
-    if (!m_inst) {
-        m_inst = new FpsCounter;
-    }
-    return m_inst;
-}
-
-void FpsCounter::Free()
-{
-    delete m_inst;
+    static FpsCounter inst;
+    return inst;
 }
 
 void FpsCounter::Feed()
@@ -95,4 +88,27 @@ int FpsCounter::Get()
     return m_prevFps;
 }
 
-FpsCounter* FpsCounter::m_inst= nullptr;
+TimeManager::TimeManager()
+{
+    m_prevTick = ::GetTickCount();
+}
+
+TimeManager & TimeManager::Instance()
+{
+    static TimeManager mgr;
+    return mgr;
+}
+
+void TimeManager::MakeTick()
+{
+    DWORD now = ::GetTickCount();
+    m_delta = (float)(now - m_prevTick) / 16.666666f;
+    m_prevTick = now;
+}
+
+float TimeManager::GetTickDelta()
+{
+    return (float)m_delta;
+}
+
+TimeManager * TimeManager::m_inst = nullptr;
